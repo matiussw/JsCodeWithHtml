@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Práctica JavaScript - Proyecto Base</title>
+    <style>
+        /* css/styles.css */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.2em;
+        }
+
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-section {
+            display: none;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .exercise-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .exercise-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .exercise-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .exercise-code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+
+        .run-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background 0.3s ease;
+        }
+
+        .run-btn:hover {
+            background: #5a67d8;
+        }
+
+        .output {
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            font-family: monospace;
+            min-height: 30px;
+        }
+
+        .difficulty {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .difficulty.basico {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .difficulty.intermedio {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .difficulty.avanzado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .info-section {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .structure-tree {
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: monospace;
+            white-space: pre;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Proyecto de Práctica JavaScript</h1>
+            <p class="subtitle">Desde lo básico hasta lo avanzado</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('inicio')">Inicio</button>
+            <button class="tab-btn" onclick="showTab('basicos')">Básicos</button>
+            <button class="tab-btn" onclick="showTab('intermedios')">Intermedios</button>
+            <button class="tab-btn" onclick="showTab('avanzados')">Avanzados</button>
+            <button class="tab-btn" onclick="showTab('estructura')">Estructura</button>
+        </div>
+
+        <!-- Sección Inicio -->
+        <div id="inicio" class="content-section active">
+            <h2>¡Bienvenido al Proyecto de Práctica JavaScript!</h2>
+            <div class="info-section">
+                <h3>📋 Sobre este proyecto</h3>
+                <p>Este proyecto está diseñado para ayudarte a practicar JavaScript desde conceptos básicos hasta avanzados. Cada ejercicio incluye:</p>
+                <ul style="margin: 15px 0; padding-left: 20px;">
+                    <li>Explicación clara del concepto</li>
+                    <li>Código de ejemplo</li>
+                    <li>Posibilidad de ejecutar y ver resultados</li>
+                    <li>Progresión gradual de dificultad</li>
+                </ul>
+            </div>
+
+            <div class="info-section">
+                <h3>🎯 Objetivos de aprendizaje</h3>
+                <div class="exercise-grid">
+                    <div class="exercise-card">
+                        <div class="exercise-title">Básicos</div>
+                        <div class="exercise-description">Variables, operadores, condicionales, bucles y funciones básicas</div>
+                    </div>
+                    <div class="exercise-card">
+                        <div class="exercise-title">Intermedios</div>
+                        <div class="exercise-description">Arrays, objetos, DOM manipulation, eventos y programación funcional</div>
+                    </div>
+                    <div class="exercise-card">
+                        <div class="exercise-title">Avanzados</div>
+                        <div class="exercise-description">Async/await, APIs, clases, módulos y patrones de diseño</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección Básicos -->
+        <div id="basicos" class="content-section">
+            <h2>📚 Ejercicios Básicos</h2>
+            
+            <div class="exercise-card">
+                <span class="difficulty basico">BÁSICO</span>
+                <div class="exercise-title">01 - Variables y Tipos de Datos</div>
+                <div class="exercise-description">Aprende a declarar variables y trabajar con diferentes tipos de datos en JavaScript.</div>
+                <div class="exercise-code">// 01-variables.js
+let nombre = "Juan";
+const edad = 25;
+var esEstudiante = true;
+
+console.log("Nombre:", nombre);
+console.log("Edad:", edad);
+console.log("Es estudiante:", esEstudiante);
+console.log("Tipo de nombre:", typeof nombre);</div>
+                <button class="run-btn" onclick="runExercise('variables')">Ejecutar</button>
+                <div id="output-variables" class="output"></div>
+            </div>
+
+            <div class="exercise-card">
+                <span class="difficulty basico">BÁSICO</span>
+                <div class="exercise-title">02 - Operadores</div>
+                <div class="exercise-description">Practica operadores aritméticos, de comparación y lógicos.</div>
+                <div class="exercise-code">// 02-operadores.js
+let a = 10;
+let b = 5;
+
+console.log("Suma:", a + b);
+console.log("Resta:", a - b);
+console.log("Multiplicación:", a * b);
+console.log("División:", a / b);
+console.log("¿a es mayor que b?", a > b);
+console.log("¿a es igual a b?", a === b);</div>
+                <button class="run-btn" onclick="runExercise('operadores')">Ejecutar</button>
+                <div id="output-operadores" class="output"></div>
+            </div>
+
+            <div class="exercise-card">
+                <span class="difficulty basico">BÁSICO</span>
+                <div class="exercise-title">03 - Condicionales</div>
+                <div class="exercise-description">Implementa lógica condicional con if, else if y else.</div>
+                <div class="exercise-code">// 03-condicionales.js
+let calificacion = 85;
+
+if (calificacion >= 90) {
+    console.log("Excelente - A");
+} else if (calificacion >= 80) {
+    console.log("Muy bien - B");
+} else if (calificacion >= 70) {
+    console.log("Bien - C");
+} else {
+    console.log("Necesitas mejorar");
+}</div>
+                <button class="run-btn" onclick="runExercise('condicionales')">Ejecutar</button>
+                <div id="output-condicionales" class="output"></div>
+            </div>
+
+            <div class="exercise-card">
+                <span class="difficulty basico">BÁSICO</span>
+                <div class="exercise-title">04 - Bucles</div>
+                <div class="exercise-description">Aprende a usar for, while y do-while para repetir código.</div>
+                <div class="exercise-code">// 04-bucles.js
+console.log("Bucle for:");
+for (let i = 1; i <= 5; i++) {
+    console.log(`Iteración ${i}`);
+}
+
+console.log("\\nBucle while:");
+let contador = 1;
+while (contador <= 3) {
+    console.log(`Contador: ${contador}`);
+    contador++;
+}</div>
+                <button class="run-btn" onclick="runExercise('bucles')">Ejecutar</button>
+                <div id="output-bucles" class="output"></div>
+            </div>
+        </div>
+
+        <!-- Sección Intermedios -->
+        <div id="intermedios" class="content-section">
+            <h2>⚡ Ejercicios Intermedios</h2>
+            
+            <div class="exercise-card">
+                <span class="difficulty intermedio">INTERMEDIO</span>
+                <div class="exercise-title">05 - Funciones</div>
+                <div class="exercise-description">Crea y utiliza funciones con diferentes tipos de parámetros y valores de retorno.</div>
+                <div class="exercise-code">// 05-funciones.js
+function saludar(nombre = "Usuario") {
+    return `¡Hola, ${nombre}!`;
+}
+
+const calcularArea = (base, altura) => {
+    return base * altura;
+}
+
+console.log(saludar("María"));
+console.log(saludar());
+console.log("Área del rectángulo:", calcularArea(5, 3));</div>
+                <button class="run-btn" onclick="runExercise('funciones')">Ejecutar</button>
+                <div id="output-funciones" class="output"></div>
+            </div>
+
+            <div class="exercise-card">
+                <span class="difficulty intermedio">INTERMEDIO</span>
+                <div class="exercise-title">06 - Arrays</div>
+                <div class="exercise-description">Manipula arrays con métodos como push, pop, map, filter y reduce.</div>
+                <div class="exercise-code">// 06-arrays.js
+let numeros = [1, 2, 3, 4, 5];
+
+console.log("Array original:", numeros);
+
+let cuadrados = numeros.map(num => num * num);
+console.log("Cuadrados:", cuadrados);
+
+let pares = numeros.filter(num => num % 2 === 0);
+console.log("Números pares:", pares);
+
+let suma = numeros.reduce((acc, num) => acc + num, 0);
+console.log("Suma total:", suma);</div>
+                <button class="run-btn" onclick="runExercise('arrays')">Ejecutar</button>
+                <div id="output-arrays" class="output"></div>
+            </div>
+
+            <div class="exercise-card">
+                <span class="difficulty intermedio">INTERMEDIO</span>
+                <div class="exercise-title">07 - Objetos</div>
+                <div class="exercise-description">Trabaja con objetos, propiedades, métodos y destructuring.</div>
+                <div class="exercise-code">// 07-objetos.js
+const persona = {
+    nombre: "Ana",
+    edad: 28,
+    profesion: "Desarrolladora",
+    saludar() {
+        return `Hola, soy ${this.nombre}`;
+    }
+};
+
+console.log("Persona:", persona);
+console.log(persona.saludar());
+
+const { nombre, edad } = persona;
+console.log(`Nombre: ${nombre}, Edad: ${edad}`);</div>
+                <button class="run-btn" onclick="runExercise('objetos')">Ejecutar</button>
+                <div id="output-objetos" class="output"></div>
+            </div>
+
+            <div class="exercise-card">
+                <span class="difficulty intermedio">INTERMEDIO</span>
+                <div class="exercise-title">08 - DOM Básico</div>
+                <div class="exercise-description">Manipula elementos del DOM y maneja eventos básicos.</div>
+                <div class="exercise-code">// 08-dom.js
+// Simulamos manipulación del DOM
+console.log("=== Simulación DOM ===");
+
+// Crear elemento virtual
+const elemento = {
+    id: "miBoton",
+    textContent: "Clic aquí",
+    addEventListener: function(evento, callback) {
+        console.log(`Evento '${evento}' agregado al elemento`);
+        callback(); // Simular click
+    }
+};
+
+elemento.addEventListener("click", () => {
+    console.log("¡Botón clickeado!");
+    elemento.textContent = "¡Clickeado!";
+    console.log("Texto actualizado:", elemento.textContent);
+});</div>
+                <button class="run-btn" onclick="runExercise('dom')">Ejecutar</button>
+                <div id="output-dom" class="output"></div>
+            </div>
+        </div>
+
+        <!-- Sección Avanzados -->
+        <div id="avanzados" class="content-section">
+            <h2>🔥 Ejercicios Avanzados</h2>
+            
+            <div class="exercise-card">
+                <span class="difficulty avanzado">AVANZADO</span>
+                <div class="exercise-title">09 - Promesas y Async/Await</div>
+                <div class="exercise-description">Trabaja con programación asíncrona usando promesas y async/await.</div>
+                <div class="exercise-code">// 09-async.js
+function simularAPI() {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const exito = Math.random() > 0.3;
+            if (exito) {
+                resolve({ datos: "Información obtenida", timestamp: new Date() });
+            } else {
+                reject("Error en la API");
+            }
+        }, 1000);
+    });
+}
+
+async function obtenerDatos() {
+    try {
+        console.log("Obteniendo datos...");
+        const resultado = await simularAPI();
+        console.log("Datos recibidos:", resultado);
+    } catch (error) {
+        console.log("Error:", error);
+    }
+}
+
+obtenerDatos();</div>
+                <button class="run-btn" onclick="runExercise('async')">Ejecutar</button>
+                <div id="output-async" class="output"></div>
+            </div>
+
+            <div class="exercise-card">
+                <span class="difficulty avanzado">AVANZADO</span>
+                <div class="exercise-title">10 - Clases y Herencia</div>
+                <div class="exercise-description">Implementa programación orientada a objetos con clases ES6.</div>
+                <div class="exercise-code">// 10-clases.js
+class Animal {
+    constructor(nombre, tipo) {
+        this.nombre = nombre;
+        this.tipo = tipo;
+    }
+    
+    hablar() {
+        console.log(`${this.nombre} hace un sonido`);
+    }
+}
+
+class Perro extends Animal {
+    constructor(nombre, raza) {
+        super(nombre, "Perro");
+        this.raza = raza;
+    }
+    
+    hablar() {
+        console.log(`${this.nombre} ladra: ¡Guau!`);
+    }
+}
+
+const miPerro = new Perro("Rex", "Labrador");
+console.log("Mi perro:", miPerro);
+miPerro.hablar();</div>
+                <button class="run-btn" onclick="runExercise('clases')">Ejecutar</button>
+                <div id="output-clases" class="output"></div>
+            </div>
+
+            <div class="exercise-card">
+                <span class="difficulty avanzado">AVANZADO</span>
+                <div class="exercise-title">11 - Módulos (Simulación)</div>
+                <div class="exercise-description">Simula el uso de módulos ES6 con import/export.</div>
+                <div class="exercise-code">// 11-modulos.js
+// Simulamos módulos
+const MathUtils = {
+    PI: 3.14159,
+    
+    calcularAreaCirculo(radio) {
+        return this.PI * radio * radio;
+    },
+    
+    calcularPerimetroCirculo(radio) {
+        return 2 * this.PI * radio;
+    }
+};
+
+// Uso del "módulo"
+console.log("=== Usando módulo MathUtils ===");
+const radio = 5;
+console.log(`Radio: ${radio}`);
+console.log(`Área: ${MathUtils.calcularAreaCirculo(radio)}`);
+console.log(`Perímetro: ${MathUtils.calcularPerimetroCirculo(radio)}`);</div>
+                <button class="run-btn" onclick="runExercise('modulos')">Ejecutar</button>
+                <div id="output-modulos" class="output"></div>
+            </div>
+
+            <div class="exercise-card">
+                <span class="difficulty avanzado">AVANZADO</span>
+                <div class="exercise-title">12 - Patrones de Diseño</div>
+                <div class="exercise-description">Implementa patrones comunes como Singleton y Observer.</div>
+                <div class="exercise-code">// 12-patrones.js
+// Patrón Singleton
+class Configuracion {
+    constructor() {
+        if (Configuracion.instance) {
+            return Configuracion.instance;
+        }
+        this.datos = { tema: "oscuro", idioma: "es" };
+        Configuracion.instance = this;
+    }
+    
+    obtener(key) {
+        return this.datos[key];
+    }
+}
+
+const config1 = new Configuracion();
+const config2 = new Configuracion();
+
+console.log("¿Son la misma instancia?", config1 === config2);
+console.log("Tema:", config1.obtener("tema"));
+
+// Patrón Observer simple
+class EventEmitter {
+    constructor() {
+        this.eventos = {};
+    }
+    
+    on(evento, callback) {
+        if (!this.eventos[evento]) {
+            this.eventos[evento] = [];
+        }
+        this.eventos[evento].push(callback);
+    }
+    
+    emit(evento, data) {
+        if (this.eventos[evento]) {
+            this.eventos[evento].forEach(callback => callback(data));
+        }
+    }
+}
+
+const emitter = new EventEmitter();
+emitter.on("usuario-logueado", (usuario) => {
+    console.log(`Usuario ${usuario} se ha logueado`);
+});
+
+emitter.emit("usuario-logueado", "Juan");</div>
+                <button class="run-btn" onclick="runExercise('patrones')">Ejecutar</button>
+                <div id="output-patrones" class="output"></div>
+            </div>
+        </div>
+
+        <!-- Sección Estructura -->
+        <div id="estructura" class="content-section">
+            <h2>📁 Estructura del Proyecto</h2>
+            
+            <div class="info-section">
+                <h3>Estructura de archivos recomendada:</h3>
+                <div class="structure-tree">JsWithHtmlAndCss/
+├── index.html              # Página principal
+├── css/
+│   └── styles.css          # Estilos principales
+├── js/
+│   ├── main.js            # JavaScript principal
+│   └── ejercicios/
+│       ├── 01-variables.js
+│       ├── 02-operadores.js
+│       ├── 03-condicionales.js
+│       ├── 04-bucles.js
+│       ├── 05-funciones.js
+│       ├── 06-arrays.js
+│       ├── 07-objetos.js
+│       ├── 08-dom.js
+│       ├── 09-async.js
+│       ├── 10-clases.js
+│       ├── 11-modulos.js
+│       └── 12-patrones.js
+├── ejercicios-html/
+│   ├── ejercicio-01.html  # Ejercicios DOM específicos
+│   ├── ejercicio-02.html
+│   └── ...
+└── README.md              # Documentación</div>
+            </div>
+
+            <div class="info-section">
+                <h3>📝 Instrucciones para usar este proyecto:</h3>
+                <ol style="padding-left: 20px; line-height: 1.6;">
+                    <li>Crea la estructura de carpetas mostrada arriba</li>
+                    <li>Copia el código de cada ejercicio en su archivo correspondiente</li>
+                    <li>Modifica y experimenta con cada ejercicio</li>
+                    <li>Agrega tus propios ejercicios siguiendo la numeración</li>
+                    <li>Usa la consola del navegador para ver los resultados</li>
+                </ol>
+            </div>
+
+            <div class="info-section">
+                <h3>🎯 Sugerencias para el aprendizaje:</h3>
+                <ul style="padding-left: 20px; line-height: 1.6;">
+                    <li><strong>Practica regularmente:</strong> Dedica al menos 30 minutos diarios</li>
+                    <li><strong>Modifica los ejemplos:</strong> Cambia valores y observa qué sucede</li>
+                    <li><strong>Crea variaciones:</strong> Basándote en cada ejercicio, crea uno similar</li>
+                    <li><strong>Usa la consola:</strong> Experimenta directamente en DevTools</li>
+                    <li><strong>Documenta tu progreso:</strong> Comenta tu código y toma notas</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // js/main.js - Funcionalidad principal
+        function showTab(tabName) {
+            // Ocultar todas las secciones
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(tabName).classList.add('active');
+            
+            // Actualizar botones activos
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Función para ejecutar ejercicios
+        function runExercise(exerciseType) {
+            const outputElement = document.getElementById(`output-${exerciseType}`);
+            let output = '';
+            
+            // Capturar console.log
+            const originalLog = console.log;
+            console.log = function(...args) {
+                output += args.join(' ') + '\n';
+                originalLog.apply(console, args);
+            };
+
+            try {
+                switch(exerciseType) {
+                    case 'variables':
+                        // 01-variables.js
+                        let nombre = "Juan";
+                        const edad = 25;
+                        var esEstudiante = true;
+
+                        console.log("Nombre:", nombre);
+                        console.log("Edad:", edad);
+                        console.log("Es estudiante:", esEstudiante);
+                        console.log("Tipo de nombre:", typeof nombre);
+                        break;
+
+                    case 'operadores':
+                        // 02-operadores.js
+                        let a = 10;
+                        let b = 5;
+
+                        console.log("Suma:", a + b);
+                        console.log("Resta:", a - b);
+                        console.log("Multiplicación:", a * b);
+                        console.log("División:", a / b);
+                        console.log("¿a es mayor que b?", a > b);
+                        console.log("¿a es igual a b?", a === b);
+                        break;
+
+                    case 'condicionales':
+                        // 03-condicionales.js
+                        let calificacion = 85;
+
+                        if (calificacion >= 90) {
+                            console.log("Excelente - A");
+                        } else if (calificacion >= 80) {
+                            console.log("Muy bien - B");
+                        } else if (calificacion >= 70) {
+                            console.log("Bien - C");
+                        } else {
+                            console.log("Necesitas mejorar");
+                        }
+                        break;
+
+                    case 'bucles':
+                        // 04-bucles.js
+                        console.log("Bucle for:");
+                        for (let i = 1; i <= 5; i++) {
+                            console.log(`Iteración ${i}`);
+                        }
+
+                        console.log("\nBucle while:");
+                        let contador = 1;
+                        while (contador <= 3) {
+                            console.log(`Contador: ${contador}`);
+                            contador++;
+                        }
+                        break;
+
+                    case 'funciones':
+                        // 05-funciones.js
+                        function saludar(nombre = "Usuario") {
+                            return `¡Hola, ${nombre}!`;
+                        }
+
+                        const calcularArea = (base, altura) => {
+                            return base * altura;
+                        }
+
+                        console.log(saludar("María"));
+                        console.log(saludar());
+                        console.log("Área del rectángulo:", calcularArea(5, 3));
+                        break;
+
+                    case 'arrays':
+                        // 06-arrays.js
+                        let numeros = [1, 2, 3, 4, 5];
+
+                        console.log("Array original:", numeros);
+
+                        let cuadrados = numeros.map(num => num * num);
+                        console.log("Cuadrados:", cuadrados);
+
+                        let pares = numeros.filter(num => num % 2 === 0);
+                        console.log("Números pares:", pares);
+
+                        let suma = numeros.reduce((acc, num) => acc + num, 0);
+                        console.log("Suma total:", suma);
+                        break;
+
+                    case 'objetos':
+                        // 07-objetos.js
+                        const persona = {
+                            nombre: "Ana",
+                            edad: 28,
+                            profesion: "Desarrolladora",
+                            saludar() {
+                                return `Hola, soy ${this.nombre}`;
+                            }
+                        };
+
+                        console.log("Persona:", persona);
+                        console.log(persona.saludar());
+
+                        const { nombre: nombrePersona, edad: edadPersona } = persona;
+                        console.log(`Nombre: ${nombrePersona}, Edad: ${edadPersona}`);
+                        break;
+
+                    case 'dom':
+                        // 08-dom.js
+                        console.log("=== Simulación DOM ===");
+
+                        const elemento = {
+                            id: "miBoton",
+                            textContent: "Clic aquí",
+                            addEventListener: function(evento, callback) {
+                                console.log(`Evento '${evento}' agregado al elemento`);
+                                callback();
+                            }
+                        };
+
+                        elemento.addEventListener("click", () => {
+                            console.log("¡Botón clickeado!");
+                            elemento.textContent = "¡Clickeado!";
+                            console.log("Texto actualizado:", elemento.textContent);
+                        });
+                        break;
+
+                    case 'async':
+                        // 09-async.js
+                        function simularAPI() {
+                            return new Promise((resolve, reject) => {
+                                setTimeout(() => {
+                                    const exito = Math.random() > 0.3;
+                                    if (exito) {
+                                        resolve({ datos: "Información obtenida", timestamp: new Date() });
+                                    } else {
+                                        reject("Error en la API");
+                                    }
+                                }, 1000);
+                            });
+                        }
+
+                        async function obtenerDatos() {
+                            try {
+                                console.log("Obteniendo datos...");
+                                const resultado = await simularAPI();
+                                console.log("Datos recibidos:", resultado);
+                            } catch (error) {
+                                console.log("Error:", error);
+                            }
+                        }
+
+                        obtenerDatos();
+                        break;
+
+                    case 'clases':
+                        // 10-clases.js
+                        class Animal {
+                            constructor(nombre, tipo) {
+                                this.nombre = nombre;
+                                this.tipo = tipo;
+                            }
+                            
+                            hablar() {
+                                console.log(`${this.nombre} hace un sonido`);
+                            }
+                        }
+
+                        class Perro extends Animal {
+                            constructor(nombre, raza) {
+                                super(nombre, "Perro");
+                                this.raza = raza;
+                            }
+                            
+                            hablar() {
+                                console.log(`${this.nombre} ladra: ¡Guau!`);
+                            }
+                        }
+
+                        const miPerro = new Perro("Rex", "Labrador");
+                        console.log("Mi perro:", miPerro);
+                        miPerro.hablar();
+                        break;
+
+                    case 'modulos':
+                        // 11-modulos.js
+                        const MathUtils = {
+                            PI: 3.14159,
+                            
+                            calcularAreaCirculo(radio) {
+                                return this.PI * radio * radio;
+                            },
+                            
+                            calcularPerimetroCirculo(radio) {
+                                return 2 * this.PI * radio;
+                            }
+                        };
+
+                        console.log("=== Usando módulo MathUtils ===");
+                        const radio = 5;
+                        console.log(`Radio: ${radio}`);
+                        console.log(`Área: ${MathUtils.calcularAreaCirculo(radio)}`);
+                        console.log(`Perímetro: ${MathUtils.calcularPerimetroCirculo(radio)}`);
+                        break;
+
+                    case 'patrones':
+                        // 12-patrones.js
+                        class Configuracion {
+                            constructor() {
+                                if (Configuracion.instance) {
+                                    return Configuracion.instance;
+                                }
+                                this.datos = { tema: "oscuro", idioma: "es" };
+                                Configuracion.instance = this;
+                            }
+                            
+                            obtener(key) {
+                                return this.datos[key];
+                            }
+                        }
+
+                        const config1 = new Configuracion();
+                        const config2 = new Configuracion();
+
+                        console.log("¿Son la misma instancia?", config1 === config2);
+                        console.log("Tema:", config1.obtener("tema"));
+
+                        class EventEmitter {
+                            constructor() {
+                                this.eventos = {};
+                            }
+                            
+                            on(evento, callback) {
+                                if (!this.eventos[evento]) {
+                                    this.eventos[evento] = [];
+                                }
+                                this.eventos[evento].push(callback);
+                            }
+                            
+                            emit(evento, data) {
+                                if (this.eventos[evento]) {
+                                    this.eventos[evento].forEach(callback => callback(data));
+                                }
+                            }
+                        }
+
+                        const emitter = new EventEmitter();
+                        emitter.on("usuario-logueado", (usuario) => {
+                            console.log(`Usuario ${usuario} se ha logueado`);
+                        });
+
+                        emitter.emit("usuario-logueado", "Juan");
+                        break;
+                }
+            } catch (error) {
+                output += `Error: ${error.message}\n`;
+            }
+
+            // Restaurar console.log
+            console.log = originalLog;
+            
+            // Mostrar output
+            outputElement.textContent = output || 'Ejecutado correctamente (revisar consola para async)';
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Proyecto de Práctica JavaScript cargado correctamente');
+            console.log('💡 Usa las pestañas para navegar entre ejercicios');
+            console.log('🔍 Presiona F12 para abrir las herramientas de desarrollador');
+        });
+    </script>
+</body>
+</html>
